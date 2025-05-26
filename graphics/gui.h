@@ -4,12 +4,10 @@
 #include "renderer.h"
 #include "visualization_handler.h"
 #include "complexity_handler.h"
-#include "../utilities/types.h" // Includes global enums
+#include "../utilities/types.h"
 #include <vector>
 #include <string>
 #include <set>
-
-// Class is now in the global namespace
 
 class GUI {
 public:
@@ -26,16 +24,18 @@ private:
     ComplexityHandler& compHandler;
     sf::Font& appFont;
 
-    // Constants are part of the class or global, not a separate namespace
     const float PADDING = 15.f;
-    const float TITLE_HEIGHT = 30.f;
-    const float CHECKBOX_ITEM_HEIGHT = 22.f;
-    const int   CHECKBOX_FONT_SIZE = 14;
-    const float CHECKBOX_TEXT_OFFSET_X = 5.f; // Renamed for clarity
-    const float CHECKBOX_SQUARE_SIZE = 15.f;
-    const float DS_ITEM_MIN_WIDTH = 120.f;
-    const float DS_ITEM_SPACING = 10.f; // Corrected: Was DS_ITEM_SPACING, now accessible
-    const float TOP_BAR_SCROLL_BUTTON_WIDTH = 25.f;
+    const float TITLE_AREA_HEIGHT = 35.f; // Increased space for panel titles
+    const float CHECKBOX_ITEM_HEIGHT = 24.f; // Slightly taller items
+    const int CHECKBOX_FONT_SIZE = 14;
+    const float CHECKBOX_TEXT_OFFSET_X = 8.f;
+    const float CHECKBOX_SQUARE_SIZE = 16.f;
+    const float DS_ITEM_MIN_WIDTH = 130.f;
+    const float DS_ITEM_SPACING = 10.f;
+    
+    // DS Top Bar Slider
+    const float DS_SLIDER_TRACK_HEIGHT = 8.f;
+    const float DS_SLIDER_KNOB_HEIGHT_FACTOR = 1.5f; // Knob is taller than track
 
     sf::FloatRect topBarRect;
     sf::FloatRect visualizationPaneRect;
@@ -45,11 +45,15 @@ private:
     sf::FloatRect timeComplexityGraphRect;
     sf::FloatRect spaceComplexityGraphRect;
 
+    // DS Top Bar Slider
     float dsListScrollOffset = 0.f;
     float dsListVisibleWidth = 0.f;
     float dsListTotalWidth = 0.f;
-    sf::RectangleShape dsScrollLeftButton;
-    sf::RectangleShape dsScrollRightButton;
+    sf::FloatRect dsSliderTrackRect; // For the track of the DS horizontal slider
+    float dsSliderKnobX = 0.f;       // Current X position of the DS slider knob
+    float dsSliderKnobWidth = 50.f;  // Width of the DS slider knob
+    bool isDraggingDSSlider = false;
+
 
     float algListScrollOffset = 0.f;
     float algListVisibleHeight = 0.f;
@@ -64,22 +68,26 @@ private:
     struct CheckboxUIData {
         sf::FloatRect rect;
         std::string label;
-        DataStructure dsEnum; // Using global DataStructure enum
-        Algorithm algEnum;    // Using global Algorithm enum
+        DataStructure dsEnum;
+        Algorithm algEnum;
         bool isDS;
         bool isVisible = true;
     };
-    std::vector<CheckboxUIData> dsCheckboxItems; // Corrected name
-    std::vector<CheckboxUIData> algCheckboxItems; // Corrected name
+    std::vector<CheckboxUIData> dsCheckboxItems;
+    std::vector<CheckboxUIData> algCheckboxItems;
     
     sf::Vector2f mousePos;
 
     void initializeLayout(unsigned int windowWidth, unsigned int windowHeight);
     void populateDSCheckboxes();
-    void layoutDSCheckboxes();
+    void layoutDSCheckboxes(); // This will now use dsListScrollOffset
     void populateAlgorithmCheckboxes();
-    void layoutAlgorithmCheckboxes(); // Corrected name
+    void layoutAlgorithmCheckboxes();
 
     void updateSliderKnobPositionFromSpeed();
     void updateSpeedFromSliderKnobPosition();
+
+    // New methods for DS Slider
+    void updateDSSliderKnobPositionFromScrollOffset();
+    void updateDSScrollOffsetFromSliderKnobPosition();
 };
