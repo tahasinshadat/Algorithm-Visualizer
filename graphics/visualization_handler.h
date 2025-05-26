@@ -1,21 +1,32 @@
+// graphics/visualization_handler.h
 #pragma once
-#include "types.h"
+#include "../utilities/types.h" // Includes global enums
+#include "renderer.h"
+#include <vector>
+#include <set>
+#include <string>
+
+// Class is now in the global namespace
 
 class VisualizationHandler {
 public:
-    VisualizationHandler() : currentDS(DataStructure::Graph) {}
+    VisualizationHandler();
 
-    void setDataStructure(DataStructure ds) { currentDS = ds; }
-    void setAlgorithm(Algorithm alg)        { currentAlg = alg; }
+    void setDataStructure(DataStructure ds);
+    void setAlgorithm(Algorithm alg);
 
-    DataStructure getDataStructure() const { return currentDS; }
-    Algorithm     getAlgorithm()     const { return currentAlg; }
+    DataStructure getCurrentDataStructure() const;
+    std::string getCurrentDataStructureDisplayName() const;
+    Algorithm getCurrentAlgorithm() const;
+    std::vector<Algorithm> getAvailableAlgorithms() const;
 
-    int  getSpeedMs()          const { return speedMs; }
-    void setSpeedMs(int v)           { speedMs = v;   }
+    int getSpeedMs() const;
+    void setSpeedMs(int v);
+
+    void drawCurrentVisualization(Renderer& R, const sf::FloatRect& vizPane);
 
 private:
     DataStructure currentDS;
-    Algorithm     currentAlg = Algorithm::None;
-    int           speedMs    = 300;
+    Algorithm currentAlg;
+    int speedMs;
 };

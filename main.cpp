@@ -1,5 +1,6 @@
+// main.cpp
 #include <iostream>
-#include "visualizer.h"
+#include "graphics/visualizer.h"
 
 int main() {
     VisualizerApp app;
